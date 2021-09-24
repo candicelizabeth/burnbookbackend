@@ -4,6 +4,11 @@ class CommentsController < ApplicationController
         render json: comments
     end
 
+    def show 
+        comment = Comment.find_by_id(params[:id])
+        render json: comment
+    end
+
     def create 
         comment = Comment.new(comment_params)
         # byebug
@@ -12,6 +17,22 @@ class CommentsController < ApplicationController
         else
             render json: {error: "Couldnt be saved"}
         end
+    end
+
+    def update
+        #  byebug
+        comment = Comment.find_by_id(params[:id])
+        if comment.update(comment_params)
+            render json: comment
+        else
+            render json: {error: "Couldn't Update"}
+        end
+    end
+
+    def destroy
+        comment = Comment.find_by_id(params[:id])
+        comment.destroy
+        render json: {message: "Successfully deleted #{comment.title}"}
     end
 
     private
